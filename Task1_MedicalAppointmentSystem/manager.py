@@ -4,7 +4,7 @@ class ClinicManager:
     def __init__(self):
         self.patients = {}      
         self.doctors = {}       
-        self.appointments = {}  # aid -> Appointment
+        self.appointments = {}
 
     def add_patient(self, pid: str, name: str, phone: str, dob: str) -> bool:
         if pid in self.patients:
