@@ -5,15 +5,16 @@ def main():
     print("Medical Appointment System (Task 1)")
 
     while True:
-        print("\n" + "="*50)
+        print("\n" + "="*55)
         print("1. View All Patients")
         print("2. View All Doctors")
         print("3. Add New Patient")
         print("4. Add New Doctor")
         print("5. Book Appointment")
-        print("6. View Patient Records")
-        print("7. Add Medical Record")
-        print("8. View All Appointments")
+        print("6. Cancel Appointment")
+        print("7. View Patient Records")
+        print("8. Add Medical Record")
+        print("9. View All Appointments")
         print("0. Exit")
         choice = input("\nEnter your choice: ").strip()
 
@@ -47,20 +48,24 @@ def main():
             aid = input("Appointment ID: ").strip()
             pid = input("Patient ID: ").strip()
             did = input("Doctor ID: ").strip()
-            dt = input("Date & Time (YYYY-MM-DD HH:MM): ").strip()
+            dt = input("Date & Time (e.g. 2026-04-20 14:30): ").strip()
             manager.book_appointment(aid, pid, did, dt)
 
-        elif choice == "6":
+        elif choice == "6":   # 新增 Cancel
+            aid = input("Appointment ID to cancel: ").strip()
+            manager.cancel_appointment(aid)
+
+        elif choice == "7":
             pid = input("Patient ID: ").strip()
             records = manager.get_patient_records(pid)
             if records:
-                print(f"\nMedical Records for Patient {pid}:")
+                print(f"\nMedical Records for {pid}:")
                 for r in records:
                     print(r)
             else:
                 print("No medical records found.")
 
-        elif choice == "7":
+        elif choice == "8":
             pid = input("Patient ID: ").strip()
             date = input("Date (YYYY-MM-DD): ").strip()
             diagnosis = input("Diagnosis: ").strip()
@@ -68,11 +73,11 @@ def main():
             notes = input("Notes (optional): ").strip()
             manager.add_medical_record(pid, date, diagnosis, prescription, notes)
 
-        elif choice == "8":
+        elif choice == "9":
             manager.view_all_appointments()
 
         elif choice == "0":
-            print("Thank you for using the Medical Appointment System!")
+            print("Thank you for using the system!")
             break
         else:
             print("Invalid choice! Please try again.")
