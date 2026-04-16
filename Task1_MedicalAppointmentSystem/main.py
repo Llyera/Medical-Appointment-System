@@ -51,7 +51,7 @@ def main():
             dt = input("Date & Time (e.g. 2026-04-20 14:30): ").strip()
             manager.book_appointment(aid, pid, did, dt)
 
-        elif choice == "6":   # 新增 Cancel
+        elif choice == "6":
             aid = input("Appointment ID to cancel: ").strip()
             manager.cancel_appointment(aid)
 
