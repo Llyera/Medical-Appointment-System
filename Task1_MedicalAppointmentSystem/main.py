@@ -5,7 +5,7 @@ def main():
     print("Medical Appointment System (Task 1)")
 
     while True:
-        print("\n" + "="*55)
+        print("\n")
         print("1. View All Patients")
         print("2. View All Doctors")
         print("3. Add New Patient")
