@@ -2,9 +2,9 @@ from models import Patient, Doctor, Appointment, MedicalRecord
 
 class ClinicManager:
     def __init__(self):
-        self.patients = {}      # pid -> Patient
-        self.doctors = {}       # pid -> Doctor
-        self.appointments = {}  # aid -> Appointment
+        self.patients = {}
+        self.doctors = {}
+        self.appointments = {}
 
     def add_patient(self, pid: str, name: str, phone: str, dob: str) -> bool:
         if pid in self.patients:
