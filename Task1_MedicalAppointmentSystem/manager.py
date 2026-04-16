@@ -1,51 +1,59 @@
-from abc import ABC, abstractmethod
+from models import Patient, Doctor, Appointment, MedicalRecord
 
-class Person(ABC):
-    def __init__(self, pid: str, name: str, phone: str):
-        self._pid = pid
-        self.name = name
-        self.phone = phone
-      
-    def display_info(self):
-        pass
+class ClinicManager:
+    def __init__(self):
+        self.patients = {}      # pid -> Patient
+        self.doctors = {}       # pid -> Doctor
+        self.appointments = {}  # aid -> Appointment
 
-class Patient(Person):
-    def __init__(self, pid: str, name: str, phone: str, dob: str):
-        super().__init__(pid, name, phone)
-        self.dob = dob
-        self.medical_records = []
+    def add_patient(self, pid: str, name: str, phone: str, dob: str) -> bool:
+        if pid in self.patients:
+            print("Error: Patient ID already exists!")
+            return False
+        self.patients[pid] = Patient(pid, name, phone, dob)
+        return True
 
-    def add_record(self, record):
-        self.medical_records.append(record)
+    def add_doctor(self, pid: str, name: str, phone: str, specialty: str) -> bool:
+        if pid in self.doctors:
+            print("Error: Doctor ID already exists!")
+            return False
+        self.doctors[pid] = Doctor(pid, name, phone, specialty)
+        return True
 
-    def display_info(self):
-        return f"Patient [{self._pid}] {self.name} | Phone: {self.phone} | DOB: {self.dob}"
+    def book_appointment(self, aid: str, pid: str, did: str, datetime_str: str) -> bool:
+        if pid not in self.patients:
+            print("Error: Patient not found!")
+            return False
+        if did not in self.doctors:
+            print("Error: Doctor not found!")
+            return False
+        if aid in self.appointments:
+            print("Error: Appointment ID already exists!")
+            return False
 
-class Doctor(Person):
-    def __init__(self, pid: str, name: str, phone: str, specialty: str):
-        super().__init__(pid, name, phone)
-        self.specialty = specialty
+        patient = self.patients[pid]
+        doctor = self.doctors[did]
+        self.appointments[aid] = Appointment(aid, patient, doctor, datetime_str)
+        return True
 
-    def display_info(self):
-        return f"Doctor [{self._pid}] Dr. {self.name} | Specialty: {self.specialty}"
+    def get_patient_records(self, pid: str):
+        if pid not in self.patients:
+            print("Error: Patient not found!")
+            return None
+        return self.patients[pid].medical_records
 
-class MedicalRecord:
-    def __init__(self, date: str, diagnosis: str, prescription: str, notes: str):
-        self.date = date
-        self.diagnosis = diagnosis
-        self.prescription = prescription
-        self.notes = notes
+    def add_medical_record(self, pid: str, date: str, diagnosis: str, prescription: str, notes: str = ""):
+        if pid not in self.patients:
+            print("Error: Patient not found!")
+            return False
+        record = MedicalRecord(date, diagnosis, prescription, notes)
+        self.patients[pid].add_record(record)
+        print(f"Medical record added for patient {pid}")
+        return True
 
-    def __str__(self):
-        return f"{self.date} | Diagnosis: {self.diagnosis} | Prescription: {self.prescription}"
-
-class Appointment:
-    def __init__(self, app_id: str, patient: Patient, doctor: Doctor, datetime_str: str):
-        self.app_id = app_id
-        self.patient = patient
-        self.doctor = doctor
-        self.datetime = datetime_str
-        self.status = "Booked"
-
-    def __str__(self):
-        return f"Appointment[{self.app_id}] {self.datetime} | {self.patient.name} → Dr.{self.doctor.name}"
+    def view_all_appointments(self):
+        if not self.appointments:
+            print("No appointments found.")
+            return
+        for app in self.appointments.values():
+            print(app)
